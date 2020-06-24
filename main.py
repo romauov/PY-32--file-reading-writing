@@ -1,19 +1,3 @@
-# создаём словарь с блюдами
-# открываем файл
-# читаем строку с названием блюда,
-# если строка пустая - break
-# помещаем в словарь запись с ключом (название блюда) и значением (список ингридиентов)
-# читаем строку с количеством ингридиентов
-# запускаем цикл по количеству ингридиентов
-#     читаем сроку, разбиваем её по " | " на:\
-#         1 название ингридиента
-#         2 количество ингридиента
-#         3 размерность ингридиента
-#     разбитую строку преобразуем в словарь с ключами 'ingredient_name', 'quantity', 'measure'
-#     полученный словарь заносим список ингридиентов
-# читаем пустую строку
-
-
 cook_book = {}
 
 with open('recipes.txt', encoding = 'utf8') as f:
@@ -34,8 +18,66 @@ with open('recipes.txt', encoding = 'utf8') as f:
             cook_book[meal_name].append(ing_dict)
         f.readline()
 
-print(cook_book)
-print(cook_book.keys())
-print(cook_book['Фахитос'])
+# print(cook_book)
+# print('\n', cook_book.keys())
+# print('\n', cook_book['Фахитос'])
+
+# получаем список блюд
+# считываем кол-во гостей, исключаем из списка
+# сверяем по списку, есть ли блюда в нашей книге
+# если да то оставляем блюдо в списке, если нет то удаляем и выводим сообщение об ошибочном блюде
+# создаем пустой словарь покупок
+# цикл по списку блюд
+#     вводим в словарь cook_book, получаем список со словарями ингридиентов
+#     получаем в словаре название ингридиента,
+#         если ингридиента нет в сете, то
+#             добавляем ингридиент в сет
+#             добавляем словрь с ингридиентом в писок покупок
+#         если ингридиент в сете
+#             прибавляем кол-во ингридиента к уже имеющемуся в списке
+# цикл по списку покупок
+#     получаем из словаря значением с кол-вом и умножаем на кол-во гостей
+# возвращаем список покупок
+
+def make_buy_list(incoming_list, guest_number):
+    """
+    ['Запеченный картофель', 'Омлет'], 2
+    """
+    # guests_number = incoming_list[1]
+    # incoming_list = incoming_list[0]
+    meals_check_list = list(cook_book.keys())
+    for meal in incoming_list:
+        if meal not in meals_check_list:
+            incoming_list.remove(meal)
+            print(f'Блюдо {meal} отсутствует в книге рецептов')
+    buy_dict = {}
+    for meal in incoming_list:
+        ingredients = cook_book[meal]
+        for ingredient in ingredients:
+            if ingredient['ingredient_name'] not in buy_dict.keys():
+                ing_key = ingredient['ingredient_name']
+                del(ingredient['ingredient_name'])
+                buy_dict[ing_key] = ingredient
+
+            else:
+                # print(buy_dict[ingredient['ingredient_name']]['quantity']) #уже имеющееся кол-во ингридиента
+                # print(ingredient['quantity'])                              #кол-во которое нужно добавить
+                buy_dict[ingredient['ingredient_name']]['quantity'] += ingredient['quantity']
+                # print(buy_dict[ingredient['ingredient_name']]['quantity'])
+                # print(type(buy_dict[ingredient['ingredient_name']]['quantity']), type(ingredient['quantity']))
+
+    for ingredient in buy_dict.keys():
+        # print(ingredient)
+        # print(buy_dict[ingredient])
+        # print(buy_dict[ingredient]['quantity'])
+        buy_dict[ingredient]['quantity'] *= guest_number
+
+    print('\n', buy_dict)
+    return buy_dict
+
+
+make_buy_list(['Запеченный картофель', 'Салат', 'Омлет', 'Фахитос', 'Шаурма'], 5)
+
+
 
 
