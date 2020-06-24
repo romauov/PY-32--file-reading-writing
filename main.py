@@ -18,7 +18,7 @@ with open('recipes.txt', encoding = 'utf8') as f:
             cook_book[meal_name].append(ing_dict)
         f.readline()
 
-# print(cook_book)
+print(cook_book)
 # print('\n', cook_book.keys())
 # print('\n', cook_book['Фахитос'])
 
@@ -49,7 +49,7 @@ def make_buy_list(incoming_list, guest_number):
     for meal in incoming_list:
         if meal not in meals_check_list:
             incoming_list.remove(meal)
-            print(f'Блюдо {meal} отсутствует в книге рецептов')
+            print(f'\nБлюдо {meal} отсутствует в книге рецептов')
     buy_dict = {}
     for meal in incoming_list:
         ingredients = cook_book[meal]
